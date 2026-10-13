@@ -1,0 +1,21 @@
+﻿{
+  "short_name": "TRACE BENIN",
+  "name": "TRACE BENIN V6.8 - SERVICE DE TRANSMISSION TECHNIQUE",
+  "icons": [
+    {
+      "src": "./icon-192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "./icon-192.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": "./index.html",
+  "background_color": "#f4f4f0",
+  "theme_color": "#0a7a42",
+  "display": "standalone",
+  "orientation": "portrait"
+}
