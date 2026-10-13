@@ -1,12 +1,8 @@
-[
-  {
-    "relation": ["delegate_permission/common.handle_all_urls"],
-    "target": {
-      "namespace": "android_app",
-      "package_name": "com.tracebenin.app",
-      "sha256_cert_fingerprints": [
-        "00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00:00"
-      ]
-    }
-  }
-]
+[{
+      "relation": ["delegate_permission/common.handle_all_urls"],
+      "target": {
+        "namespace": "android_app",
+        "package_name": "com.tracebenin.ap",
+        "sha256_cert_fingerprints": ["F8:AD:2C:EE:33:B1:DE:CB:C2:EE:6A:4F:2B:67:D2:0F:BE:12:E7:72:AA:4B:B9:E9:BE:55:10:AD:6F:A3:6F:9D"]
+      }
+    }]
