@@ -90,7 +90,7 @@ pre{background:#0f172a;color:#e2e8f0;padding:10px;border-radius:10px;overflow:au
   <p class="small" style="margin:0 0 10px 0;color:#334155;line-height:1.5">
     Saisissez le numéro WhatsApp de l'émetteur au Bénin pour lui transmettre son lien d'accès au canal de transmission :
   </p>
-  <input id="invite_tel_step" placeholder="N° WhatsApp Émetteur (ex: +229 01 67 08 71 23)">
+  <input id="invite_tel_step" placeholder="N° WhatsApp Émetteur (ex: +229 97 00 00 00)">
   <button class="btn-whatsapp" onclick="inviteEmetteurStep()">💬 ENVOYER LE LIEN DE TRANSMISSION</button>
   <hr style="margin:16px 0 10px 0;border:0;border-top:1px solid #bbf7d0">
   <button class="btn3" onclick="skipOnboardingStep()">Accéder au tableau de bord &rarr;</button>
@@ -100,19 +100,15 @@ pre{background:#0f172a;color:#e2e8f0;padding:10px;border-radius:10px;overflow:au
 <div id="emetteurPages" class="hidden">
 <div class="card">
 <h3>📍 Saisie d'une Déclaration Technique</h3>
-
-
 <div class="gps-alert">
   📡 <b>ATTENTION ÉMETTEUR :</b> Pensez à **activer la Localisation / GPS** de votre téléphone portable avant de commencer la capture.
 </div>
-
-
 <div class="guide-box">
   <b>Guide de saisie émetteur :</b><br>
   1. Activez le GPS de votre téléphone.<br>
   2. Renseignez le code interne.<br>
   3. Capturez les coordonnées de position.<br>
-  4. Validez l'attestation de responsabilité.
+  4. Validez l'attestation sous votre responsabilité émetteur.
 </div>
 <input id="p_code" placeholder="Code Producteur / Lot"><input id="p_surf" type="number" step="0.01" placeholder="Surface estimée (Ha)"><div class="grid2"><input id="p_lat" placeholder="Latitude auto"><input id="p_lon" placeholder="Longitude auto"></div>
 <div id="gps" style="font-size:12px;font-weight:700;padding:6px;background:#fef3c7;border-radius:8px">📍 Captation des coordonnées en cours... Veillez à activer le GPS.</div>
@@ -175,6 +171,7 @@ Contactez le support technique par WhatsApp pour obtenir la facture proforma et 
 <div class="tabs"><button id="tb1" class="active" onclick="navTab(1)">DOCUMENTS ÉMETTEUR</button><button id="tb2" onclick="navTab(2)">DOSSIER TRANSMISSION</button><button id="tb3" onclick="navTab(3)">MON COMPTE</button></div>
 
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/localforage/1.10.0/localforage.min.js"></script>
 <script>
 localforage.config({ name: 'TraceBeninV6', storeName: 'parcelles_store' });
 
@@ -243,13 +240,8 @@ function checkRoleUI(){
 
 
   if(DB.role==="EMETTEUR"){
-    if(!me||me.type!=="EMETTEUR"){
-      document.getElementById("emetteurReg").classList.remove("hidden");
-      document.getElementById("emetteurPages").classList.add("hidden");
-    } else {
-      document.getElementById("emetteurReg").classList.add("hidden");
-      document.getElementById("emetteurPages").classList.remove("hidden");
-    }
+    if(!me||me.type!=="EMETTEUR"){document.getElementById("emetteurReg").classList.remove("hidden");document.getElementById("emetteurPages").classList.add("hidden");}
+    else{document.getElementById("emetteurReg").classList.add("hidden");document.getElementById("emetteurPages").classList.remove("hidden");}
     document.getElementById("destinataireReg").classList.add("hidden");
     document.getElementById("destinatairePages").classList.add("hidden");
     if(onboardingBox) onboardingBox.classList.add("hidden");
@@ -329,14 +321,10 @@ let pos=null;
 if(navigator.geolocation){
   navigator.geolocation.watchPosition(p=>{
     pos={lat:p.coords.latitude,lon:p.coords.longitude,acc:p.coords.accuracy};
-    const el=document.getElementById("gps");
-    if(el) el.innerHTML=`✅ Coordonnées brutes capturées : ${pos.lat.toFixed(6)}, ${pos.lon.toFixed(6)} (Précision ±${Math.round(pos.acc)}m)`;
+    const el=document.getElementById("gps");if(el) el.innerHTML=`✅ Coordonnées brutes capturées : ${pos.lat.toFixed(6)}, ${pos.lon.toFixed(6)} (Précision ±${Math.round(pos.acc)}m)`;
     document.getElementById("p_lat").value=pos.lat.toFixed(6);
     document.getElementById("p_lon").value=pos.lon.toFixed(6);
-  }, (err)=>{
-    const el=document.getElementById("gps");
-    if(el) el.innerHTML="⚠️ GPS non détecté. Assurez-vous d'avoir **activé la localisation / GPS** sur votre téléphone.";
-  },{enableHighAccuracy:true, timeout:10000});
+  },()=>{document.getElementById("gps").innerHTML="❌ Signal non détecté";},{enableHighAccuracy:true});
 }
 
 
@@ -346,7 +334,7 @@ async function saveParcelle(){
 
 
   const code=document.getElementById("p_code").value.trim().toUpperCase();
-  if(!code || !pos) return alert("Code producteur + Coordonnées GPS obligatoires. Activez votre GPS.");
+  if(!code || !pos) return alert("Code producteur + Coordonnées obligatoires");
   const lat=parseFloat(document.getElementById("p_lat").value)||pos.lat;
   const lon=parseFloat(document.getElementById("p_lon").value)||pos.lon;
   const surf=parseFloat(document.getElementById("p_surf").value)||0;
@@ -690,7 +678,7 @@ function navTab(n){
   }
   if(rolePage) rolePage.classList.add("hidden");
   if(DB.role==="EMETTEUR"){
-    if(emetteurPages) emetteurPages.classList.remove("hidden"); if(destinatairePages) emetteurPages.classList.add("hidden");
+    if(emetteurPages) emetteurPages.classList.remove("hidden"); if(destinatairePages) destinatairePages.classList.add("hidden");
     if(onboardingBox) onboardingBox.classList.add("hidden");
   } else if(DB.role==="DESTINATAIRE"){
     if(emetteurPages) emetteurPages.classList.add("hidden");
