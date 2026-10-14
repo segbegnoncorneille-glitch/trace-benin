@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>TRACE BENIN V6.9 - SERVICE DE TRANSMISSION TECHNIQUE</title>
+<title>TRACE BENIN V6.8 - SERVICE DE TRANSMISSION TECHNIQUE</title>
 <link rel="manifest" href="./manifest.json">
 <link rel="icon" type="image/png" href="./icon-192.png">
 <link rel="apple-touch-icon" href="./icon-192.png">
@@ -20,6 +20,8 @@ header img{width:52px;height:52px;background:white;border-radius:14px;padding:4p
 .btn:active{opacity:.8}
 .btn2{background:#111;color:white;border:0;padding:12px;border-radius:10px;width:100%;margin-top:8px;font-weight:700;cursor:pointer}
 .btn3{background:white;color:var(--green);border:2px solid var(--green);padding:10px;border-radius:10px;width:100%;margin-top:8px;font-weight:700;cursor:pointer}
+.btn-transmit{background:#2563eb;color:white;border:0;padding:12px;border-radius:10px;width:100%;margin-top:10px;font-weight:800;font-size:15px;cursor:pointer}
+.btn-recuperer{background:#0a7a42;color:white;border:0;padding:14px;border-radius:10px;width:100%;margin-bottom:12px;font-weight:800;font-size:15px;cursor:pointer}
 .btn-whatsapp{background:var(--wa);color:white;text-align:center;padding:14px;border-radius:12px;width:100%;font-weight:800;text-decoration:none;display:block;margin-top:8px;font-size:15px}
 input,select,textarea{width:100%;padding:12px;margin:6px 0;border:1.5px solid #ddd;border-radius:10px;font-size:15px}
 .badge{padding:4px 10px;border-radius:20px;font-size:11px;font-weight:800;display:inline-block}
@@ -35,6 +37,8 @@ pre{background:#0f172a;color:#e2e8f0;padding:10px;border-radius:10px;overflow:au
 .invite-step{background:#f0fdf4;border:2px solid #22c55e;padding:16px;border-radius:14px;margin-top:12px}
 .legal-box{background:#fffbebf0;border:1px solid #fef3c7;padding:10px;border-radius:8px;margin:8px 0;font-size:11px;color:#92400e}
 .guide-box{background:#f8fafc;border-left:4px solid var(--green);padding:10px;margin-bottom:12px;font-size:12px;color:#334155}
+.gps-alert{background:#fef2f2;border:1.5px solid #ef4444;color:#991b1b;padding:10px;border-radius:10px;font-size:12px;margin-bottom:10px;font-weight:bold}
+.coffre-box{background:#fff7ed;border:2px dashed #f97316;padding:16px;border-radius:12px;text-align:center;margin-top:12px}
 </style>
 </head>
 <body>
@@ -86,7 +90,7 @@ pre{background:#0f172a;color:#e2e8f0;padding:10px;border-radius:10px;overflow:au
   <p class="small" style="margin:0 0 10px 0;color:#334155;line-height:1.5">
     Saisissez le numéro WhatsApp de l'émetteur au Bénin pour lui transmettre son lien d'accès au canal de transmission :
   </p>
-  <input id="invite_tel_step" placeholder="N° WhatsApp Émetteur (ex: +229 97 00 00 00)">
+  <input id="invite_tel_step" placeholder="N° WhatsApp Émetteur (ex: +229 01 67 08 71 23)">
   <button class="btn-whatsapp" onclick="inviteEmetteurStep()">💬 ENVOYER LE LIEN DE TRANSMISSION</button>
   <hr style="margin:16px 0 10px 0;border:0;border-top:1px solid #bbf7d0">
   <button class="btn3" onclick="skipOnboardingStep()">Accéder au tableau de bord &rarr;</button>
@@ -96,14 +100,18 @@ pre{background:#0f172a;color:#e2e8f0;padding:10px;border-radius:10px;overflow:au
 <div id="emetteurPages" class="hidden">
 <div class="card">
 <h3>📍 Saisie d'une Déclaration Technique</h3>
+<div class="gps-alert">
+  📡 <b>ATTENTION ÉMETTEUR :</b> Pensez à **activer la Localisation / GPS** de votre téléphone portable avant de commencer la capture.
+</div>
 <div class="guide-box">
   <b>Guide de saisie émetteur :</b><br>
-  1. Renseignez le code interne.<br>
-  2. Capturez les coordonnées de position.<br>
-  3. Validez l'attestation sous votre responsabilité émetteur.
+  1. Activez le GPS de votre téléphone.<br>
+  2. Renseignez le code interne.<br>
+  3. Capturez les coordonnées de position.<br>
+  4. Validez l'attestation de responsabilité.
 </div>
 <input id="p_code" placeholder="Code Producteur / Lot"><input id="p_surf" type="number" step="0.01" placeholder="Surface estimée (Ha)"><div class="grid2"><input id="p_lat" placeholder="Latitude auto"><input id="p_lon" placeholder="Longitude auto"></div>
-<div id="gps" style="font-size:12px;font-weight:700;padding:6px;background:#fef3c7;border-radius:8px">📍 Captation des coordonnées en cours...</div>
+<div id="gps" style="font-size:12px;font-weight:700;padding:6px;background:#fef3c7;border-radius:8px">📍 Captation des coordonnées en cours... Veillez à activer le GPS.</div>
 <input type="file" id="p_photo" accept="image/*" capture="environment">
 
 
@@ -126,8 +134,9 @@ pre{background:#0f172a;color:#e2e8f0;padding:10px;border-radius:10px;overflow:au
 <div class="card" id="marketCard">
   <h3>Données transmises par l'émetteur</h3>
   <div class="guide-box">
-    Sélectionnez les déclarations enregistrées par votre émetteur pour compiler le fichier de transmission.
+    Cliquez sur le bouton ci-dessous pour interroger le relais et télécharger les déclarations transmises par l'émetteur.
   </div>
+  <button class="btn-recuperer" onclick="recupererDonneesRelais()">📥 RÉCUPÉRER MES DONNÉES BRUTES</button>
   <div id="marketList"></div>
 </div>
 
@@ -162,7 +171,6 @@ Contactez le support technique par WhatsApp pour obtenir la facture proforma et 
 <div class="tabs"><button id="tb1" class="active" onclick="navTab(1)">DOCUMENTS ÉMETTEUR</button><button id="tb2" onclick="navTab(2)">DOSSIER TRANSMISSION</button><button id="tb3" onclick="navTab(3)">MON COMPTE</button></div>
 
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/localforage/1.10.0/localforage.min.js"></script>
 <script>
 localforage.config({ name: 'TraceBeninV6', storeName: 'parcelles_store' });
 
@@ -312,10 +320,14 @@ let pos=null;
 if(navigator.geolocation){
   navigator.geolocation.watchPosition(p=>{
     pos={lat:p.coords.latitude,lon:p.coords.longitude,acc:p.coords.accuracy};
-    const el=document.getElementById("gps");if(el) el.innerHTML=`✅ Coordonnées brutes capturées : ${pos.lat.toFixed(6)}, ${pos.lon.toFixed(6)} (Précision ±${Math.round(pos.acc)}m)`;
+    const el=document.getElementById("gps");
+    if(el) el.innerHTML=`✅ Coordonnées brutes capturées : ${pos.lat.toFixed(6)}, ${pos.lon.toFixed(6)} (Précision ±${Math.round(pos.acc)}m)`;
     document.getElementById("p_lat").value=pos.lat.toFixed(6);
     document.getElementById("p_lon").value=pos.lon.toFixed(6);
-  },()=>{document.getElementById("gps").innerHTML="❌ Signal non détecté";},{enableHighAccuracy:true});
+  }, (err)=>{
+    const el=document.getElementById("gps");
+    if(el) el.innerHTML="⚠️ GPS non détecté. Assurez-vous d'avoir **activé la localisation / GPS** sur votre téléphone.";
+  },{enableHighAccuracy:true, timeout:10000});
 }
 
 
@@ -325,7 +337,7 @@ async function saveParcelle(){
 
 
   const code=document.getElementById("p_code").value.trim().toUpperCase();
-  if(!code || !pos) return alert("Code producteur + Coordonnées obligatoires");
+  if(!code || !pos) return alert("Code producteur + Coordonnées GPS obligatoires. Activez votre GPS.");
   const lat=parseFloat(document.getElementById("p_lat").value)||pos.lat;
   const lon=parseFloat(document.getElementById("p_lon").value)||pos.lon;
   const surf=parseFloat(document.getElementById("p_surf").value)||0;
@@ -336,6 +348,7 @@ async function saveParcelle(){
       id:"BJ-"+Date.now().toString().slice(-6),
       code:code, surface:surf, lat:lat, lon:lon, photo:b64||"", date:new Date().toISOString(),
       check:"DÉCLARATION_ÉMETTEUR_ENREGISTRÉE",
+      transmitted: false,
       detail:"Données déclarées transmises sous la responsabilité exclusive de l'émetteur",
       declaration_honor: true,
       emetteurId:DB.me?.id||"ANON", emetteurNom:DB.me?.nom||"ÉMETTEUR BENIN"
@@ -343,7 +356,7 @@ async function saveParcelle(){
     await localforage.setItem(p.id, p);
     DB.parcelles.push(p); renderAll();
     document.getElementById("p_code").value=""; certifBox.checked = false;
-    alert("Déclaration enregistrée pour transmission : "+p.id);
+    alert("Déclaration enregistrée localement : "+p.id+"\n\nUne fois prêt, cliquez sur le bouton 'TRANSMETTRE' sous la fiche.");
   };
   
   if(file){ let r=new FileReader(); r.onload=e=>doSave(e.target.result); r.readAsDataURL(file); }
@@ -383,32 +396,124 @@ async function syncReal(){
 }
 
 
+async function transmettreSeule(id) {
+  const p = DB.parcelles.find(x => x.id === id);
+  if(!p) return alert("Déclaration introuvable.");
+
+
+  if(!navigator.onLine) {
+    return alert("🌐 Vous êtes actuellement Hors-Ligne (Offline).\n\nVeuillez vous connecter à Internet puis réessayez de cliquer sur TRANSMETTRE.");
+  }
+
+
+  try {
+    document.getElementById("stats").innerHTML = `Transmission de ${p.id} au relais...`;
+    
+    const response = await fetch(WORKER_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        action: "push_declaration",
+        declaration: p,
+        emetteur: DB.me
+      })
+    });
+
+
+    if(response.ok) {
+      p.transmitted = true;
+      p.check = "DÉCLARATION_TRANSMISE_AU_RELAIS";
+      p.detail = "Données déclarées brutes transmises avec succès";
+      await localforage.setItem(p.id, p);
+      renderAll();
+      alert(`✅ Déclaration ${p.id} : Données déclarées brutes transmises avec succès !`);
+    } else {
+      alert("❌ Erreur lors de la transmission au relais.");
+    }
+  } catch(e) {
+    alert("❌ Connexion au relais impossible.");
+  }
+}
+
+
+async function recupererDonneesRelais() {
+  try {
+    document.getElementById("stats").innerHTML = "📥 Récupération des données brutes depuis le relais...";
+    const response = await fetch(WORKER_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ action: "get_declarations" })
+    });
+    
+    if(response.ok) {
+      const data = await response.json();
+      if(data.declarations && Array.isArray(data.declarations)) {
+        for(let d of data.declarations) {
+          d.transmitted = true;
+          await localforage.setItem(d.id, d);
+          if(!DB.parcelles.some(x => x.id === d.id)) {
+            DB.parcelles.push(d);
+          }
+        }
+        renderAll();
+        alert("✅ Données brutes récupérées avec succès !");
+      } else {
+        alert("ℹ️ Aucune nouvelle donnée brute disponible sur le relais.");
+      }
+    } else {
+      alert("❌ Erreur lors de la récupération.");
+    }
+  } catch(e) {
+    alert("❌ Connexion au relais impossible pour la récupération.");
+  }
+  document.getElementById("stats").innerHTML = `${DB.parcelles.length} éléments stockés | Profil: ${DB.role||"Aucun"}`;
+}
+
+
 function renderAll(){
-  document.getElementById("stats").innerHTML=`${DB.parcelles.length} éléments en attente de transmission | Profil: ${DB.role||"Aucun"}`;
+  document.getElementById("stats").innerHTML=`${DB.parcelles.length} éléments stockés | Profil: ${DB.role||"Aucun"}`;
   
+  // VUE ÉMETTEUR DE SES DÉCLARATIONS
   document.getElementById("listParcelles").innerHTML=[...DB.parcelles].reverse().map(p=>`
     <div class="card">
-      <b>${p.id} - ${p.code}</b> <span class="badge verified">${p.check}</span><br>
+      <b>${p.id} - ${p.code}</b> <span class="badge ${p.transmitted ? 'ok' : 'wait'}">${p.transmitted ? 'TRANSMIS' : 'EN ATTENTE'}</span><br>
       <small>📍 ${p.lat.toFixed(6)}, ${p.lon.toFixed(6)} | ${p.surface} ha</small><br>
-      <small><b>Rapport brut :</b> ${p.detail}</small><br>
-      <small style="color:#0a7a42"><b>Émis par :</b> ${p.emetteurNom || p.vendeurNom || "ÉMETTEUR"}</small>
+      <small><b>Rapport brut :</b> ${p.transmitted ? "Données déclarées brutes transmises avec succès" : p.detail}</small><br>
+      <small style="color:#0a7a42"><b>Émis par :</b> ${p.emetteurNom || "ÉMETTEUR"}</small>
+      ${!p.transmitted ? `<button class="btn-transmit" onclick="transmettreSeule('${p.id}')">📡 TRANSMETTRE</button>` : `<div style="font-size:11px;color:#065f46;margin-top:6px;font-weight:bold">✅ Données déclarées brutes transmises avec succès</div>`}
     </div>
-  `).join("")||'<div class="card small">Aucune donnée transmise</div>';
+  `).join("")||'<div class="card small">Aucune donnée enregistrée</div>';
   
-  const vList=DB.emetteurs.length?DB.emetteurs:[{nom:"STRUCTURE BOHICON (Exemple)",ifu:"BJ-IFU-0123",zone:"Zakpota",id:"V-DEMO"}];
-  document.getElementById("marketList").innerHTML=vList.map(v=>`
-    <div class="card" style="border:1.5px solid #0a7a42">
-      <b>${v.nom}</b> <span class="badge verified">Déclaration disponible</span><br>
-      <small>Zone : ${v.zone||"Bénin"} | Relevés : ${DB.parcelles.filter(p=>p.emetteurId===v.id || p.vendeurId===v.id).length} ${v.sponsor?`| Via : ${v.sponsor}`:""}</small><br>
-      <button class="btn3" onclick="filterEmetteur('${v.id}')">Sélectionner pour le dossier</button>
-    </div>
-  `).join("");
+  // VUE DESTINATAIRE DE LA LISTE
+  const transmises = DB.parcelles.filter(p => p.transmitted);
   
-  document.getElementById("selectorDestinataire").innerHTML=DB.parcelles.map(p=>`
+  if(transmises.length === 0) {
+    document.getElementById("marketList").innerHTML = `
+      <div class="coffre-box">
+        <div style="font-size:32px">🔒</div>
+        <h4 style="margin:8px 0;color:#c2410c">Double coffre en attente</h4>
+        <p class="small" style="color:#9a3412;margin:0">
+          <b>L'émetteur n'a pas encore envoyé le document.</b><br>
+          Cliquez sur <b>"RÉCUPÉRER MES DONNÉES BRUTES"</b> ci-dessus ou demandez à l'émetteur d'envoyer la déclaration.
+        </p>
+      </div>
+    `;
+  } else {
+    const vList=DB.emetteurs.length?DB.emetteurs:[{nom: DB.me?.nom || "STRUCTURE ÉMETTRICE", id:"V-DEMO"}];
+    document.getElementById("marketList").innerHTML=vList.map(v=>`
+      <div class="card" style="border:1.5px solid #0a7a42">
+        <b>${v.nom}</b> <span class="badge verified">Déclaration disponible</span><br>
+        <small>Déclarations transmises reçues : ${transmises.length}</small><br>
+        <button class="btn3" onclick="filterEmetteur('${v.id}')">Sélectionner pour le dossier</button>
+      </div>
+    `).join("");
+  }
+  
+  document.getElementById("selectorDestinataire").innerHTML=transmises.map(p=>`
     <label style="display:block;padding:8px;border-bottom:1px solid #eee">
-      <input type="checkbox" value="${p.id}" class="chk"> <b>${p.id}</b> (${p.code}) - ${p.surface}ha - <span style="color:#666">${p.emetteurNom || p.vendeurNom || "ÉMETTEUR"}</span>
+      <input type="checkbox" value="${p.id}" class="chk" checked> <b>${p.id}</b> (${p.code}) - ${p.surface}ha - <span style="color:#666">${p.emetteurNom || "ÉMETTEUR"}</span>
     </label>
-  `).join("")||"Aucune donnée disponible dans le canal.";
+  `).join("")||"Aucune déclaration transmise dans le canal.";
   
   const currentRef=DB.currentRef||`TRACES-BJ-${Date.now().toString().slice(-6)}`;
   DB.currentRef = currentRef; saveMeta();
@@ -418,7 +523,7 @@ function renderAll(){
 function filterEmetteur(id){
   document.querySelectorAll(".chk").forEach(c=>{
     const p=DB.parcelles.find(x=>x.id===c.value);
-    if(p && (p.emetteurId === id || p.vendeurId === id)) c.checked = true;
+    if(p) c.checked = true;
   });
   navTab(2);
 }
@@ -576,7 +681,7 @@ function navTab(n){
   }
   if(rolePage) rolePage.classList.add("hidden");
   if(DB.role==="EMETTEUR"){
-    if(emetteurPages) emetteurPages.classList.remove("hidden"); if(destinatairePages) destinatairePages.classList.add("hidden");
+    if(emetteurPages) emetteurPages.classList.remove("hidden"); if(destinatairePages) emetteurPages.classList.add("hidden");
     if(onboardingBox) onboardingBox.classList.add("hidden");
   } else if(DB.role==="DESTINATAIRE"){
     if(emetteurPages) emetteurPages.classList.add("hidden");
@@ -585,7 +690,7 @@ function navTab(n){
     } else {
       if(onboardingBox) onboardingBox.classList.add("hidden"); if(destinatairePages) destinatairePages.classList.remove("hidden");
       if(n===1){ if(marketCard) marketCard.classList.remove("hidden"); if(douaneCard) douaneCard.classList.add("hidden"); if(ddsBox) ddsBox.classList.add("hidden"); if(payModal) payModal.classList.add("hidden"); }
-      if(n===2){ if(marketCard) marketCard.classList.add("hidden"); if(douaneCard) douaneCard.remove("hidden"); if(ddsBox&&DB.currentRef) ddsBox.classList.remove("hidden"); }
+      if(n===2){ if(marketCard) marketCard.classList.add("hidden"); if(douaneCard) douaneCard.classList.remove("hidden"); if(ddsBox&&DB.currentRef) ddsBox.classList.remove("hidden"); }
     }
   } else { if(rolePage) rolePage.classList.remove("hidden"); }
 }
