@@ -1,4 +1,4 @@
-﻿const CACHE_NAME = "trace-benin-v6.8-cache";
+﻿const CACHE_NAME = "trace-benin-v6.9-cache";
 const ASSETS_TO_CACHE = [
   "./",
   "./index.html",
