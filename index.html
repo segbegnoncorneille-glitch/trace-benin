@@ -406,7 +406,7 @@ async function transmettreSeule(id) {
 
 
   if(!navigator.onLine) {
-    return alert("🌐 Vous êtes actuellement Hors-Ligne (Offline).\n\nVeuillez vous connecter à Internet puis réessayez de cliquer sur TRANSMETTRE.");
+    return alert("🌐 Vous êtes actuellement Hors-Ligne (Offline).\n\nVeuillez vous connecter à Internet (Wi-Fi / 3G/4G) puis réessayez de cliquer sur TRANSMETTRE.");
   }
 
 
@@ -432,10 +432,10 @@ async function transmettreSeule(id) {
       renderAll();
       alert(`✅ Déclaration ${p.id} : Données déclarées brutes transmises avec succès !`);
     } else {
-      alert("❌ Erreur lors de la transmission au relais.");
+      alert("❌ Erreur lors de la transmission au relais. Veuillez réessayer.");
     }
   } catch(e) {
-    alert("❌ Connexion au relais impossible.");
+    alert("❌ Connexion au relais impossible. Vérifiez votre accès Internet.");
   }
 }
 
