@@ -2,7 +2,7 @@
       "relation": ["delegate_permission/common.handle_all_urls"],
       "target": {
         "namespace": "android_app",
-        "package_name": "com.tracebenin.ap",
-        "sha256_cert_fingerprints": ["F8:AD:2C:EE:33:B1:DE:CB:C2:EE:6A:4F:2B:67:D2:0F:BE:12:E7:72:AA:4B:B9:E9:BE:55:10:AD:6F:A3:6F:9D"]
+        "package_name": "com.tracebenin.app",
+        "sha256_cert_fingerprints": ["FC:01:0B:40:23:A3:01:E0:6D:B2:25:E3:F0:5C:68:17:E1:D4:93:1A:CD:BE:1A:6B:F3:53:C7:53:95:CB:93:07"]
       }
     }]
