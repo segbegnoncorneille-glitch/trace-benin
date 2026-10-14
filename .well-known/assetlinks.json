@@ -3,6 +3,6 @@
       "target": {
         "namespace": "android_app",
         "package_name": "com.tracebenin.app",
-        "sha256_cert_fingerprints": ["FC:01:0B:40:23:A3:01:E0:6D:B2:25:E3:F0:5C:68:17:E1:D4:93:1A:CD:BE:1A:6B:F3:53:C7:53:95:CB:93:07"]
+        "sha256_cert_fingerprints": ["14:D9:50:B6:11:46:5A:7D:C0:AF:FE:DF:7D:CF:39:58:6E:37:7D:A7:EA:A7:31:66:DF:CA:11:42:1A:0C:94:14"]
       }
     }]
