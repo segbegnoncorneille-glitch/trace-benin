@@ -20,8 +20,8 @@ header img{width:52px;height:52px;background:white;border-radius:14px;padding:4p
 .btn:active{opacity:.8}
 .btn2{background:#111;color:white;border:0;padding:12px;border-radius:10px;width:100%;margin-top:8px;font-weight:700;cursor:pointer}
 .btn3{background:white;color:var(--green);border:2px solid var(--green);padding:10px;border-radius:10px;width:100%;margin-top:8px;font-weight:700;cursor:pointer}
-.btn-transmit{background:#2563eb;color:white;border:0;padding:10px;border-radius:10px;width:100%;margin-top:8px;font-weight:800;font-size:14px;cursor:pointer}
-.btn-recuperer{background:#0a7a42;color:white;border:0;padding:14px;border-radius:10px;width:100%;margin-bottom:12px;font-weight:800;font-size:14px;cursor:pointer}
+.btn-transmit{background:#2563eb;color:white;border:0;padding:12px;border-radius:10px;width:100%;margin-top:10px;font-weight:800;font-size:15px;cursor:pointer}
+.btn-recuperer{background:#0a7a42;color:white;border:0;padding:14px;border-radius:10px;width:100%;margin-bottom:12px;font-weight:800;font-size:15px;cursor:pointer}
 .btn-whatsapp{background:var(--wa);color:white;text-align:center;padding:14px;border-radius:12px;width:100%;font-weight:800;text-decoration:none;display:block;margin-top:8px;font-size:15px}
 input,select,textarea{width:100%;padding:12px;margin:6px 0;border:1.5px solid #ddd;border-radius:10px;font-size:15px}
 .badge{padding:4px 10px;border-radius:20px;font-size:11px;font-weight:800;display:inline-block}
@@ -243,8 +243,13 @@ function checkRoleUI(){
 
 
   if(DB.role==="EMETTEUR"){
-    if(!me||me.type!=="EMETTEUR"){document.getElementById("emetteurReg").classList.remove("hidden");document.getElementById("emetteurPages").classList.add("hidden");}
-    else{document.getElementById("emetteurReg").classList.remove("hidden");document.getElementById("emetteurPages").classList.remove("hidden");}
+    if(!me||me.type!=="EMETTEUR"){
+      document.getElementById("emetteurReg").classList.remove("hidden");
+      document.getElementById("emetteurPages").classList.add("hidden");
+    } else {
+      document.getElementById("emetteurReg").classList.add("hidden");
+      document.getElementById("emetteurPages").classList.remove("hidden");
+    }
     document.getElementById("destinataireReg").classList.add("hidden");
     document.getElementById("destinatairePages").classList.add("hidden");
     if(onboardingBox) onboardingBox.classList.add("hidden");
@@ -353,7 +358,7 @@ async function saveParcelle(){
       code:code, surface:surf, lat:lat, lon:lon, photo:b64||"", date:new Date().toISOString(),
       check:"DÉCLARATION_ÉMETTEUR_ENREGISTRÉE",
       transmitted: false,
-      detail:"Données déclarées enregistrées (Attente de transmission)",
+      detail:"Données déclarées transmises sous la responsabilité exclusive de l'émetteur",
       declaration_honor: true,
       emetteurId:DB.me?.id||"ANON", emetteurNom:DB.me?.nom||"ÉMETTEUR BENIN"
     };
@@ -406,7 +411,7 @@ async function transmettreSeule(id) {
 
 
   if(!navigator.onLine) {
-    return alert("🌐 Vous êtes actuellement Hors-Ligne (Offline).\n\nVeuillez vous connecter à Internet (Wi-Fi / 3G/4G) puis réessayez de cliquer sur TRANSMETTRE.");
+    return alert("🌐 Vous êtes actuellement Hors-Ligne (Offline).\n\nVeuillez vous connecter à Internet puis réessayez de cliquer sur TRANSMETTRE.");
   }
 
 
@@ -432,15 +437,14 @@ async function transmettreSeule(id) {
       renderAll();
       alert(`✅ Déclaration ${p.id} : Données déclarées brutes transmises avec succès !`);
     } else {
-      alert("❌ Erreur lors de la transmission au relais. Veuillez réessayer.");
+      alert("❌ Erreur lors de la transmission au relais.");
     }
   } catch(e) {
-    alert("❌ Connexion au relais impossible. Vérifiez votre accès Internet.");
+    alert("❌ Connexion au relais impossible.");
   }
 }
 
 
-// FONCTION POUR RÉCUPÉRER LES DONNÉES BRUTES
 async function recupererDonneesRelais() {
   try {
     document.getElementById("stats").innerHTML = "📥 Récupération des données brutes depuis le relais...";
@@ -478,7 +482,7 @@ async function recupererDonneesRelais() {
 function renderAll(){
   document.getElementById("stats").innerHTML=`${DB.parcelles.length} éléments stockés | Profil: ${DB.role||"Aucun"}`;
   
-  // VUE ÉMETTEUR
+  // VUE ÉMETTEUR DE SES DÉCLARATIONS
   document.getElementById("listParcelles").innerHTML=[...DB.parcelles].reverse().map(p=>`
     <div class="card">
       <b>${p.id} - ${p.code}</b> <span class="badge ${p.transmitted ? 'ok' : 'wait'}">${p.transmitted ? 'TRANSMIS' : 'EN ATTENTE'}</span><br>
@@ -489,7 +493,7 @@ function renderAll(){
     </div>
   `).join("")||'<div class="card small">Aucune donnée enregistrée</div>';
   
-  // VUE DESTINATAIRE
+  // VUE DESTINATAIRE DE LA LISTE
   const transmises = DB.parcelles.filter(p => p.transmitted);
   
   if(transmises.length === 0) {
