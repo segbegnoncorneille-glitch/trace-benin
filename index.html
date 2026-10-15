@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>TRACE BENIN V7.0 - SERVICE D'ACHEMINEMENT TECHNIQUE</title>
+<title>TRACE BENIN V7.1 - SERVICE D'ACHEMINEMENT TECHNIQUE</title>
 <link rel="manifest" href="./manifest.json?v=20261015">
 <link rel="icon" type="image/png" href="./icon-192.png">
 <meta name="theme-color" content="#0a7a42">
@@ -45,13 +45,14 @@ pre{background:#0f172a;color:#e2e8f0;padding:10px;border-radius:10px;overflow:au
 <header>
 <img src="./icon-192.png" alt="TRACE BENIN LOGO">
 <div>
-<div style="font-weight:900;letter-spacing:.5px">TRACE BENIN V7.0</div>
+<div style="font-weight:900;letter-spacing:.5px">TRACE BENIN V7.1</div>
 <div id="stats" style="font-size:11px;margin-top:2px">Chargement...</div>
 <div style="font-size:9px;color:#a7f3d0;margin-top:2px">Service d'acheminement technique de données brutes entre émetteur et destinataire</div>
 </div>
 </header>
 
 
+<!-- SELECTION COMPTE / ROLE -->
 <div id="rolePage" class="card" style="text-align:center">
 <h2>Bienvenue sur Trace Bénin</h2>
 <p class="small">Sélectionnez votre profil d'utilisateur :</p>
@@ -61,6 +62,7 @@ pre{background:#0f172a;color:#e2e8f0;padding:10px;border-radius:10px;overflow:au
 </div>
 
 
+<!-- INSCRIPTION EMETTEUR -->
 <div id="emetteurReg" class="card hidden">
 <h3>🇧🇯 Identification de l'Émetteur</h3>
 <div class="guide-box"><b>💡 Note :</b> Renseignez l'identité de votre structure pour acheminer vos informations.</div>
@@ -70,25 +72,28 @@ pre{background:#0f172a;color:#e2e8f0;padding:10px;border-radius:10px;overflow:au
 </div>
 
 
+<!-- INSCRIPTION DESTINATAIRE -->
 <div id="destinataireReg" class="card hidden">
 <h3>🇫🇷 Identification du Destinataire</h3>
-<div class="guide-box"><b>💡 Note :</b> Indiquez la raison sociale destinataire du dossier.</div>
-<input id="a_soc" placeholder="Nom de la société destinataire"><input id="a_eori" placeholder="N° EORI UE"><input id="a_siret" placeholder="SIRET / Immatriculation"><input id="a_email" placeholder="Email professionnel">
-<button class="btn" onclick="saveDestinataire()">CRÉER LE DOSSIER & INVITER L'ÉMETTEUR</button>
+<div class="guide-box"><b>💡 Note :</b> Indiquez la raison sociale destinataire du dossier pour démarrer.</div>
+<input id="a_soc" placeholder="Nom de la société destinataire (Ex: AgroImport SAS)"><input id="a_eori" placeholder="N° EORI UE (Ex: FR123456789000)"><input id="a_siret" placeholder="SIRET / Immatriculation"><input id="a_email" placeholder="Email professionnel">
+<button class="btn" onclick="saveDestinataire()">VALIDER MON IDENTITÉ ET INVITER L'ÉMETTEUR</button>
 </div>
 
 
+<!-- ONBOARDING INVITATION WHATSAPP DESTINATAIRE -->
 <div id="destinataireOnboarding" class="invite-step hidden">
-  <div style="background:#22c55e;color:white;padding:4px 10px;border-radius:12px;font-size:11px;font-weight:bold;display:inline-block">Étape 1 sur 2 : Invitation</div>
-  <h3 style="margin:10px 0 6px 0;color:#15803d">📩 Demander les données à l'émetteur</h3>
-  <p class="small" style="margin:0 0 10px 0;color:#334155;line-height:1.5">Saisissez le numéro WhatsApp de l'émetteur au Bénin :</p>
+  <div style="background:#22c55e;color:white;padding:4px 10px;border-radius:12px;font-size:11px;font-weight:bold;display:inline-block">Étape 1 sur 2 : Invitation de l'Émetteur</div>
+  <h3 style="margin:10px 0 6px 0;color:#15803d">📩 Demander les données à l'émetteur au Bénin</h3>
+  <p class="small" style="margin:0 0 10px 0;color:#334155;line-height:1.5">Saisissez le numéro WhatsApp de la coopérative ou de l'émetteur au Bénin pour lui envoyer son lien d'accès sécurisé :</p>
   <input id="invite_tel_step" placeholder="N° WhatsApp Émetteur (ex: +229 01 67 08 71 23)">
-  <button class="btn-whatsapp" onclick="inviteEmetteurStep()">💬 ENVOYER LE LIEN D'ACHEMINEMENT</button>
+  <button class="btn-whatsapp" onclick="inviteEmetteurStep()">💬 ENVOYER LE LIEN D'ACHEMINEMENT SUR WHATSAPP</button>
   <hr style="margin:16px 0 10px 0;border:0;border-top:1px solid #bbf7d0">
-  <button class="btn3" onclick="skipOnboardingStep()">Accéder au tableau de bord &rarr;</button>
+  <button class="btn3" onclick="skipOnboardingStep()">Accéder directement au tableau de bord &rarr;</button>
 </div>
 
 
+<!-- PAGES EMETTEUR -->
 <div id="emetteurPages" class="hidden">
 <div class="card">
 <h3>📍 Saisie d'une Information Technique</h3>
@@ -104,6 +109,7 @@ pre{background:#0f172a;color:#e2e8f0;padding:10px;border-radius:10px;overflow:au
 </div>
 
 
+<!-- PAGES DESTINATAIRE -->
 <div id="destinatairePages" class="hidden">
 <div class="card" id="marketCard">
   <h3>Informations transmises par l'émetteur</h3>
@@ -145,7 +151,7 @@ async function initApp() {
   const inviteCode = urlParams.get('invite');
   if(inviteCode) { DB.invitedBy = inviteCode; localStorage.setItem("TB_INVITED_BY", inviteCode); }
   else { DB.invitedBy = localStorage.getItem("TB_INVITED_BY") || ""; }
-  const savedDB = JSON.parse(localStorage.getItem("TB_V7_META") || localStorage.getItem("TB_V6_META") || '{}');
+  const savedDB = JSON.parse(localStorage.getItem("TB_V7_META") || '{}');
   DB.role = savedDB.role || null; DB.me = savedDB.me || null; DB.paid = savedDB.paid || false; DB.currentRef = savedDB.currentRef || ""; DB.onboarded = savedDB.onboarded || false;
   const keys = await localforage.keys(); DB.parcelles = [];
   for(let key of keys){ if(key.startsWith("BJ-")||key.startsWith("PARC-")){ const p=await localforage.getItem(key); if(p) DB.parcelles.push(p); } }
@@ -154,28 +160,111 @@ async function initApp() {
   checkRoleUI();
 }
 function saveMeta(){ localStorage.setItem("TB_V7_META", JSON.stringify({ role: DB.role, me: DB.me, paid: DB.paid, currentRef: DB.currentRef, onboarded: DB.onboarded })); localStorage.setItem("TB_V6_V", JSON.stringify(DB.emetteurs)); localStorage.setItem("TB_V6_A", JSON.stringify(DB.destinataires)); }
-function setRole(r){ DB.role=r; saveMeta(); checkRoleUI(); }
+
+
+function setRole(r){ 
+  DB.role = r; 
+  saveMeta(); 
+  checkRoleUI(); 
+}
+
+
 function checkRoleUI(){
-  const me=DB.me; document.getElementById("rolePage").classList.toggle("hidden",!!DB.role);
-  document.getElementById("existingRole").innerHTML=DB.role?`Profil actif: <b>${DB.role}</b> - <a href="#" onclick="resetRole()">Changer</a>`:"";
-  const onboardingBox=document.getElementById("destinataireOnboarding");
-  if(DB.role==="EMETTEUR"){ if(!me||me.type!=="EMETTEUR"){document.getElementById("emetteurReg").classList.remove("hidden");document.getElementById("emetteurPages").classList.add("hidden");}else{document.getElementById("emetteurReg").classList.add("hidden");document.getElementById("emetteurPages").classList.remove("hidden");} document.getElementById("destinataireReg").classList.add("hidden"); document.getElementById("destinatairePages").classList.add("hidden"); if(onboardingBox) onboardingBox.classList.add("hidden"); }
-  if(DB.role==="DESTINATAIRE"){ if(!me||me.type!=="DESTINATAIRE"){document.getElementById("destinataireReg").classList.remove("hidden");document.getElementById("destinatairePages").classList.add("hidden");if(onboardingBox) onboardingBox.classList.add("hidden");}else{document.getElementById("destinataireReg").classList.add("hidden");if(!DB.onboarded){if(onboardingBox) onboardingBox.classList.remove("hidden");document.getElementById("destinatairePages").classList.add("hidden");}else{if(onboardingBox) onboardingBox.classList.add("hidden");document.getElementById("destinatairePages").classList.remove("hidden");}} document.getElementById("emetteurReg").classList.add("hidden");document.getElementById("emetteurPages").classList.add("hidden"); }
-  if(!DB.role){document.getElementById("emetteurReg").classList.add("hidden");document.getElementById("destinataireReg").classList.add("hidden");document.getElementById("emetteurPages").classList.add("hidden");document.getElementById("destinatairePages").classList.add("hidden");if(onboardingBox) onboardingBox.classList.add("hidden");}
-  navTab(1); renderAll();
+  const me = DB.me; 
+  document.getElementById("rolePage").classList.toggle("hidden", !!DB.role);
+  document.getElementById("existingRole").innerHTML = DB.role ? `Profil actif: <b>${DB.role}</b> - <a href="#" onclick="resetRole()">Changer</a>` : "";
+  
+  const onboardingBox = document.getElementById("destinataireOnboarding");
+  const destinataireReg = document.getElementById("destinataireReg");
+  const destinatairePages = document.getElementById("destinatairePages");
+  const emetteurReg = document.getElementById("emetteurReg");
+  const emetteurPages = document.getElementById("emetteurPages");
+
+
+  // Masquer tout par défaut
+  emetteurReg.classList.add("hidden");
+  emetteurPages.classList.add("hidden");
+  destinataireReg.classList.add("hidden");
+  destinatairePages.classList.add("hidden");
+  if(onboardingBox) onboardingBox.classList.add("hidden");
+
+
+  if(DB.role === "EMETTEUR"){
+    if(!me || me.type !== "EMETTEUR"){
+      emetteurReg.classList.remove("hidden");
+    } else {
+      emetteurPages.classList.remove("hidden");
+    }
+  }
+
+
+  if(DB.role === "DESTINATAIRE"){
+    if(!me || me.type !== "DESTINATAIRE"){
+      // 1. Étape identification destinataire
+      destinataireReg.classList.remove("hidden");
+    } else if(!DB.onboarded){
+      // 2. Étape invitation WhatsApp émetteur
+      if(onboardingBox) onboardingBox.classList.remove("hidden");
+    } else {
+      // 3. Tableau de bord
+      destinatairePages.classList.remove("hidden");
+    }
+  }
+
+
+  renderAll();
 }
+
+
 function resetRole(){ if(confirm("Changer de profil?")){ DB.role=null; DB.me=null; DB.onboarded=false; saveMeta(); location.reload(); } }
-function inviteEmetteurStep(){
-  const rawTel=document.getElementById("invite_tel_step").value.trim(); if(!rawTel) return alert("Numéro WhatsApp émetteur obligatoire");
-  const cleanTel=rawTel.replace(/[^0-9]/g,''); const meName=DB.me?.soc||"Le destinataire"; const myRef=DB.me?.eori||DB.me?.soc||"DEST-REF"; const baseUrl=window.location.href.split('?')[0]; const inviteLink=`${baseUrl}?invite=${encodeURIComponent(myRef)}`; const msg=`Bonjour, ${meName} demande l'acheminement de vos données. Lien d'accès: ${inviteLink} - TRACE BÉNIN`; DB.onboarded=true; saveMeta(); checkRoleUI(); window.open(`https://wa.me/${cleanTel}?text=${encodeURIComponent(msg)}`,'_blank');
+
+
+function saveDestinataire(){ 
+  const soc = document.getElementById("a_soc").value.trim(); 
+  const eori = document.getElementById("a_eori").value.trim(); 
+  if(!soc || !eori) return alert("Raison sociale + EORI obligatoires"); 
+  const a = {type:"DESTINATAIRE", id:"A-"+Date.now().toString().slice(-6), soc:soc, eori:eori, siret:document.getElementById("a_siret").value.trim(), email:document.getElementById("a_email").value.trim(), date:new Date().toISOString()}; 
+  DB.me = a; 
+  DB.destinataires.push(a); 
+  DB.onboarded = false; // Force l'étape invitation WhatsApp
+  saveMeta(); 
+  checkRoleUI(); 
 }
-function skipOnboardingStep(){ DB.onboarded=true; saveMeta(); checkRoleUI(); }
+
+
+function inviteEmetteurStep(){
+  const rawTel = document.getElementById("invite_tel_step").value.trim(); 
+  if(!rawTel) return alert("Numéro WhatsApp émetteur obligatoire");
+  const cleanTel = rawTel.replace(/[^0-9]/g,''); 
+  const meName = DB.me?.soc || "Le destinataire"; 
+  const myRef = DB.me?.eori || DB.me?.soc || "DEST-REF"; 
+  const baseUrl = window.location.href.split('?')[0]; 
+  const inviteLink = `${baseUrl}?invite=${encodeURIComponent(myRef)}`; 
+  const msg = `Bonjour, ${meName} vous demande l'acheminement de vos données géospatiales. Cliquez ici pour accéder au portail d'envoi : ${inviteLink}`; 
+  
+  DB.onboarded = true; 
+  saveMeta(); 
+  checkRoleUI(); 
+  window.open(`https://wa.me/${cleanTel}?text=${encodeURIComponent(msg)}`,'_blank');
+}
+
+
+function skipOnboardingStep(){ 
+  DB.onboarded = true; 
+  saveMeta(); 
+  checkRoleUI(); 
+}
+
+
 function saveEmetteur(){ const nom=document.getElementById("v_nom").value.trim(); const ifu=document.getElementById("v_ifu").value.trim(); if(!nom||!ifu) return alert("Nom + IFU obligatoires"); const v={ type:"EMETTEUR", id:"V-"+Date.now().toString().slice(-6), nom:nom, ifu:ifu, tel:document.getElementById("v_tel").value.trim(), zone:document.getElementById("v_zone").value.trim(), sponsor:DB.invitedBy||"DIRECT", date:new Date().toISOString() }; DB.me=v; DB.emetteurs.push(v); saveMeta(); checkRoleUI(); }
-function saveDestinataire(){ const soc=document.getElementById("a_soc").value.trim(); const eori=document.getElementById("a_eori").value.trim(); if(!soc||!eori) return alert("Raison sociale + EORI obligatoires"); const a={type:"DESTINATAIRE", id:"A-"+Date.now().toString().slice(-6), soc:soc, eori:eori, siret:document.getElementById("a_siret").value.trim(), email:document.getElementById("a_email").value.trim(), date:new Date().toISOString()}; DB.me=a; DB.destinataires.push(a); DB.onboarded=false; saveMeta(); checkRoleUI(); }
+
+
 let pos=null;
 if(navigator.geolocation){
   navigator.geolocation.watchPosition(p=>{ pos={lat:p.coords.latitude,lon:p.coords.longitude,acc:p.coords.accuracy}; const el=document.getElementById("gps"); if(el) el.innerHTML=`✅ Coordonnées capturées: ${pos.lat.toFixed(6)}, ${pos.lon.toFixed(6)} (±${Math.round(pos.acc)}m)`; document.getElementById("p_lat").value=pos.lat.toFixed(6); document.getElementById("p_lon").value=pos.lon.toFixed(6); }, err=>{ const el=document.getElementById("gps"); if(el) el.innerHTML="⚠️ GPS non détecté. Activez la localisation."; },{enableHighAccuracy:true});
 }
+
+
 async function saveParcelle(){
   const certifBox=document.getElementById("p_certif"); if(!certifBox||!certifBox.checked) return alert("Validez l'engagement émetteur");
   const code=document.getElementById("p_code").value.trim().toUpperCase(); if(!code||!pos) return alert("Code + GPS obligatoires");
@@ -183,8 +272,14 @@ async function saveParcelle(){
   const doSave=async(b64)=>{ const p={ id:"BJ-"+Date.now().toString().slice(-6), code:code, surface:surf, lat:lat, lon:lon, photo:b64||"", date:new Date().toISOString(), check:"INFORMATION_ENREGISTRÉE", transmitted:false, detail:"Donnée brute enregistrée localement - en attente d'acheminement", declaration_honor:true, emetteurId:DB.me?.id||"ANON", emetteurNom:DB.me?.nom||"ÉMETTEUR BENIN" }; await localforage.setItem(p.id,p); DB.parcelles.push(p); renderAll(); document.getElementById("p_code").value=""; certifBox.checked=false; alert("Enregistré offline: "+p.id+" - Cliquez sur TRANSMETTRE quand vous aurez du réseau"); };
   if(file){ let r=new FileReader(); r.onload=e=>doSave(e.target.result); r.readAsDataURL(file); } else { await doSave(""); }
 }
+
+
 async function checkSatReal(lat,lon){ try{ const sql=`SELECT umd_tree_cover_density_2000, umd_tree_cover_loss__year FROM results WHERE latitude=${lat} AND longitude=${lon}`; const url=`${PROXY_GFW}?sql=${encodeURIComponent(sql)}`; const res=await fetch(url); if(!res.ok) throw new Error(); const j=await res.json(); const d=j.data?.[0]||j[0]; if(!d) return {s:"DONNÉE_SATELLITE_ACHEMINÉE",detail:"Indice GFW 2020 brut acheminé"}; const dens=d.umd_tree_cover_density_2000||0; const loss=d.umd_tree_cover_loss__year||0; return {s:"DONNÉE_SATELLITE_ACHEMINÉE",detail:`Indice GFW 2020 brut: Densité ${dens}%, Perte ${loss}`}; }catch(e){ return {s:"INFORMATION_ÉMETTEUR",detail:"Donnée brute émetteur (Offline)"}; } }
+
+
 async function syncReal(){ const todo=DB.parcelles; if(!todo.length) return alert("Aucune donnée"); for(let p of todo){ document.getElementById("stats").innerHTML=`Traitement ${p.id}...`; const r=await checkSatReal(p.lat,p.lon); p.check=r.s; p.detail=r.detail; await localforage.setItem(p.id,p); renderAll(); await new Promise(r=>setTimeout(r,400)); } alert("Données brutes mises à jour"); }
+
+
 async function transmettreSeule(id){
   const p=DB.parcelles.find(x=>x.id===id); if(!p) return;
   if(!navigator.onLine) return alert("Vous êtes hors-ligne. Activez internet et réessayez TRANSMETTRE.");
@@ -195,6 +290,8 @@ async function transmettreSeule(id){
   }catch(e){ alert("Connexion au canal impossible - vérifiez internet"); }
   document.getElementById("stats").innerHTML=`${DB.parcelles.length} éléments | ${DB.role}`;
 }
+
+
 async function recupererDonneesRelais(){
   try{
     document.getElementById("stats").innerHTML="📥 Récupération depuis serveur relais...";
@@ -203,6 +300,8 @@ async function recupererDonneesRelais(){
   }catch(e){ alert("Connexion serveur impossible"); }
   document.getElementById("stats").innerHTML=`${DB.parcelles.length} éléments | ${DB.role}`;
 }
+
+
 function renderAll(){
   document.getElementById("stats").innerHTML=`${DB.parcelles.length} éléments | ${DB.role||"Aucun"}`;
   document.getElementById("listParcelles").innerHTML=[...DB.parcelles].reverse().map(p=>`<div class="card"><b>${p.id} - ${p.code}</b> <span class="badge ${p.transmitted?'ok':'wait'}">${p.transmitted?'TRANSMIS AU SERVEUR':'EN ATTENTE'}</span><br><small>📍 ${p.lat.toFixed(6)}, ${p.lon.toFixed(6)} | ${p.surface} ha</small><br><small><b>Détail:</b> ${p.detail}</small><br><small style="color:#0a7a42"><b>Émis par:</b> ${p.emetteurNom}</small>${!p.transmitted?`<button class="btn-transmit" onclick="transmettreSeule('${p.id}')">📡 TRANSMETTRE AU SERVEUR</button>`:`<div style="font-size:11px;color:#065f46;margin-top:6px;font-weight:bold">✅ Donnée transmise - visible côté France</div>`}</div>`).join("")||'<div class="card small">Aucune donnée</div>';
@@ -212,8 +311,14 @@ function renderAll(){
   document.getElementById("selectorDestinataire").innerHTML=transmises.map(p=>`<label style="display:block;padding:8px;border-bottom:1px solid #eee"><input type="checkbox" value="${p.id}" class="chk" checked> <b>${p.id}</b> (${p.code}) - ${p.surface}ha - ${p.emetteurNom}</label>`).join("")||"Aucune donnée transmise dans le relais";
   const currentRef=DB.currentRef||`TRACES-BJ-${Date.now().toString().slice(-6)}`; DB.currentRef=currentRef; saveMeta();
 }
+
+
 function filterEmetteur(id){ document.querySelectorAll(".chk").forEach(c=>c.checked=true); navTab(2); }
+
+
 function updateWhatsAppLink(){ const ref=DB.currentRef||"TRACES-BJ-2026"; const tonnes=document.getElementById("c_tonnes")?.value||"20"; const selCount=document.querySelectorAll(".chk:checked").length||1; const msg=encodeURIComponent(`Bonjour TRACE BENIN, règlement service acheminement dossier ${ref} (${selCount} éléments - ${tonnes}T)`); const btn=document.getElementById("btnWhatsAppDirect"); if(btn) btn.href=`https://wa.me/2290167087123?text=${msg}`; }
+
+
 function genDDS(){
   const ids=[...document.querySelectorAll(".chk:checked")].map(c=>c.value); if(!ids.length) return alert("Cochez au moins 1 élément");
   const tonnes=document.getElementById("c_tonnes").value||"20"; const refId=DB.currentRef; const me=DB.me||{soc:"DESTINATAIRE EU",eori:"FR000"};
@@ -226,7 +331,11 @@ function genDDS(){
   box.innerHTML=`<h3>✅ Fichier GeoData Acheminé: ${refId}</h3><b>Destinataire:</b> ${me.soc} (${me.eori})<br><b>Tonnage:</b> ${tonnes}T | <b>Éléments:</b> ${ids.length}<br><div id="qrcode" style="display:flex;justify-content:center;padding:12px"></div><pre id="gj">${displayJson}</pre><button class="btn" onclick="downloadFile('TRANS_${refId}.geojson', document.getElementById('gj').innerText)">${DB.paid?"⬇️ Télécharger GeoJSON complet (Débloqué)":"⬇️ Télécharger aperçu DEMO (verrouillé)"}</button>`;
   setTimeout(()=>{ const qr=document.getElementById("qrcode"); if(qr&&typeof QRCode!=='undefined'){qr.innerHTML="";new QRCode(qr,{text:payload,width:180,height:180});} },300); renderAll(); navTab(2);
 }
+
+
 function togglePayModal(){ const modal=document.getElementById("payModal"); if(modal.classList.contains("hidden")){ if(!DB.currentRef){DB.currentRef="TRACES-BJ-"+Date.now().toString().slice(-8);saveMeta();} updateWhatsAppLink(); } modal.classList.toggle("hidden"); }
+
+
 async function verifySecureToken(){
   const codeInput=document.getElementById("payCodeInput").value.trim(); if(!codeInput) return alert("Clé obligatoire");
   const refId=DB.currentRef||""; const ids=[...document.querySelectorAll(".chk:checked")].map(c=>c.value); const selectedParcelles=DB.parcelles.filter(p=>ids.includes(p.id)); if(!selectedParcelles.length) return alert("Sélectionnez au moins 1 élément");
@@ -237,9 +346,76 @@ async function verifySecureToken(){
     DB.paid=true; DB.serverGeoJSON=result.geoJSON; saveMeta(); alert("✅ Clé validée! Fichier complet débloqué."); document.getElementById("payModal").classList.add("hidden"); renderAll(); genDDS();
   }catch(e){ alert("Erreur connexion canal"); }
 }
+
+
 function showFactureProforma(){ const me=DB.me||{soc:"DESTINATAIRE SA",eori:"FR123456"}; const ref=DB.currentRef; const tonnes=document.getElementById("c_tonnes")?.value||"20"; const selCount=document.querySelectorAll(".chk:checked").length||1; const w=window.open("","_blank"); w.document.write(`<html><head><meta charset="utf-8"><title>Facture Proforma ${ref}</title><style>body{font-family:Arial,sans-serif;padding:30px} table{width:100%;border-collapse:collapse;margin-top:20px} td,th{border:1px solid #ccc;padding:10px}</style></head><body><h2>FACTURE PROFORMA - SERVICE TECHNIQUE D'ACHEMINEMENT</h2><p><b>Client:</b> ${me.soc} (EORI: ${me.eori})<br><b>Date:</b> ${new Date().toLocaleDateString("fr-FR")}<br><b>Dossier:</b> ${ref}</p><table><tr><th>Prestation</th><th>Montant EUR</th></tr><tr><td>Acheminement technique de données géospatiales (${ref}) - ${selCount} élément(s) - ${tonnes}T</td><td>399,00 €</td></tr><tr><th>TOTAL HT</th><th>399,00 €</th></tr></table><h3>Support:</h3><p>WhatsApp: +229 01 67 08 71 23</p><p><small>TRACE BÉNIN agit en tant qu'opérateur technique neutre d'acheminement. Responsabilité du contenu: émetteur. TVA non applicable - Art. 259B CGI - B2B Art.44</small></p></body></html>`); }
+
+
 function downloadFile(name,content){ const blob=new Blob([content],{type:"application/json"}); const a=document.createElement("a"); a.href=URL.createObjectURL(blob); a.download=name; a.click(); }
-function navTab(n){ document.querySelectorAll(".tabs button").forEach((b,i)=>{b.className=(i+1===n?"active":"");}); const marketCard=document.getElementById("marketCard"); const douaneCard=document.getElementById("douaneCard"); const ddsBox=document.getElementById("ddsBox"); const payModal=document.getElementById("payModal"); const rolePage=document.getElementById("rolePage"); const emetteurPages=document.getElementById("emetteurPages"); const destinatairePages=document.getElementById("destinatairePages"); const onboardingBox=document.getElementById("destinataireOnboarding"); if(n===3){ if(rolePage) rolePage.classList.remove("hidden"); if(emetteurPages) emetteurPages.classList.add("hidden"); if(destinatairePages) destinatairePages.classList.add("hidden"); if(onboardingBox) onboardingBox.classList.add("hidden"); if(marketCard) marketCard.classList.add("hidden"); if(douaneCard) douaneCard.classList.add("hidden"); if(ddsBox) ddsBox.classList.add("hidden"); if(payModal) payModal.classList.add("hidden"); return; } if(rolePage) rolePage.classList.add("hidden"); if(DB.role==="EMETTEUR"){ if(emetteurPages) emetteurPages.classList.remove("hidden"); if(destinatairePages) emetteurPages.classList.add("hidden"); if(onboardingBox) onboardingBox.classList.add("hidden"); } else if(DB.role==="DESTINATAIRE"){ if(emetteurPages) emetteurPages.classList.add("hidden"); if(!DB.onboarded){ if(onboardingBox) onboardingBox.classList.remove("hidden"); if(destinatairePages) emetteurPages.classList.add("hidden"); } else { if(onboardingBox) onboardingBox.classList.add("hidden"); if(destinatairePages) destinatairePages.classList.remove("hidden"); if(n===1){ if(marketCard) marketCard.classList.remove("hidden"); if(douaneCard) douaneCard.classList.add("hidden"); if(ddsBox) ddsBox.classList.add("hidden"); if(payModal) payModal.classList.add("hidden"); } if(n===2){ if(marketCard) marketCard.classList.add("hidden"); if(douaneCard) douaneCard.classList.remove("hidden"); } } } else { if(rolePage) rolePage.classList.remove("hidden"); } }
+
+
+function navTab(n){ 
+  document.querySelectorAll(".tabs button").forEach((b,i)=>{b.className=(i+1===n?"active":"");}); 
+  const marketCard=document.getElementById("marketCard"); 
+  const douaneCard=document.getElementById("douaneCard"); 
+  const ddsBox=document.getElementById("ddsBox"); 
+  const payModal=document.getElementById("payModal"); 
+  const rolePage=document.getElementById("rolePage"); 
+  const emetteurPages=document.getElementById("emetteurPages"); 
+  const destinatairePages=document.getElementById("destinatairePages"); 
+  const onboardingBox=document.getElementById("destinataireOnboarding"); 
+
+
+  if(n===3){ 
+    if(rolePage) rolePage.classList.remove("hidden"); 
+    if(emetteurPages) emetteurPages.classList.add("hidden"); 
+    if(destinatairePages) destinatairePages.classList.add("hidden"); 
+    if(onboardingBox) onboardingBox.classList.add("hidden"); 
+    if(marketCard) marketCard.classList.add("hidden"); 
+    if(douaneCard) douaneCard.classList.add("hidden"); 
+    if(ddsBox) ddsBox.classList.add("hidden"); 
+    if(payModal) payModal.classList.add("hidden"); 
+    return; 
+  } 
+
+
+  if(rolePage) rolePage.classList.add("hidden"); 
+  
+  if(DB.role==="EMETTEUR"){ 
+    if(emetteurPages) emetteurPages.classList.remove("hidden"); 
+    if(destinatairePages) destinatairePages.classList.add("hidden"); 
+    if(onboardingBox) onboardingBox.classList.add("hidden"); 
+  } else if(DB.role==="DESTINATAIRE"){ 
+    if(emetteurPages) emetteurPages.classList.add("hidden"); 
+    if(!DB.me || DB.me.type!=="DESTINATAIRE"){
+      document.getElementById("destinataireReg").classList.remove("hidden");
+      if(destinatairePages) destinatairePages.classList.add("hidden");
+      if(onboardingBox) onboardingBox.classList.add("hidden");
+    } else if(!DB.onboarded){ 
+      document.getElementById("destinataireReg").classList.add("hidden");
+      if(onboardingBox) onboardingBox.classList.remove("hidden"); 
+      if(destinatairePages) destinatairePages.classList.add("hidden"); 
+    } else { 
+      document.getElementById("destinataireReg").classList.add("hidden");
+      if(onboardingBox) onboardingBox.classList.add("hidden"); 
+      if(destinatairePages) destinatairePages.classList.remove("hidden"); 
+      if(n===1){ 
+        if(marketCard) marketCard.classList.remove("hidden"); 
+        if(douaneCard) douaneCard.classList.add("hidden"); 
+        if(ddsBox) ddsBox.classList.add("hidden"); 
+        if(payModal) payModal.classList.add("hidden"); 
+      } 
+      if(n===2){ 
+        if(marketCard) marketCard.classList.add("hidden"); 
+        if(douaneCard) douaneCard.classList.remove("hidden"); 
+      } 
+    } 
+  } else { 
+    if(rolePage) rolePage.classList.remove("hidden"); 
+  } 
+}
+
+
 window.addEventListener("load",()=>{ initApp(); if("serviceWorker" in navigator){ navigator.serviceWorker.register("./sw.js?v=20261015").then(reg=>reg.update()).catch(()=>{}); } });
 </script>
 </body>
