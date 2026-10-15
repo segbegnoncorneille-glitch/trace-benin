@@ -295,10 +295,42 @@ async function transmettreSeule(id){
 async function recupererDonneesRelais(){
   try{
     document.getElementById("stats").innerHTML="📥 Récupération depuis serveur relais...";
-    const res=await fetch(WORKER_URL,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({action:"get_declarations"})});
-    if(res.ok){ const data=await res.json(); if(data.declarations&&Array.isArray(data.declarations)&&data.declarations.length){ let c=0; for(let d of data.declarations){ await localforage.setItem(d.id,d); if(!DB.parcelles.some(x=>x.id===d.id)){ DB.parcelles.push(d); c++; } else { const idx=DB.parcelles.findIndex(x=>x.id===d.id); DB.parcelles[idx]=d; } } renderAll(); alert(`✅ ${c} nouvelles données récupérées du serveur!`); } else { alert("ℹ️ Aucune nouvelle donnée sur le serveur - demandez à l'émetteur de cliquer TRANSMETTRE"); } } else { alert("Erreur récupération"); }
-  }catch(e){ alert("Connexion serveur impossible"); }
-  document.getElementById("stats").innerHTML=`${DB.parcelles.length} éléments | ${DB.role}`;
+    const myEori = DB.me?.eori || DB.me?.soc || "";
+    const res = await fetch(WORKER_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ 
+        action: "get_declarations", 
+        destinataireEori: myEori 
+      })
+    });
+    
+    if(res.ok){ 
+      const data = await res.json(); 
+      if(data.declarations && Array.isArray(data.declarations) && data.declarations.length){ 
+        let c = 0; 
+        for(let d of data.declarations){ 
+          await localforage.setItem(d.id, d); 
+          if(!DB.parcelles.some(x => x.id === d.id)){ 
+            DB.parcelles.push(d); 
+            c++; 
+          } else { 
+            const idx = DB.parcelles.findIndex(x => x.id === d.id); 
+            DB.parcelles[idx] = d; 
+          } 
+        } 
+        renderAll(); 
+        alert(`✅ ${c} nouvelles données récupérées pour votre dossier !`); 
+      } else { 
+        alert("ℹ️ Aucune nouvelle donnée pour votre compte sur le serveur - demandez à votre émetteur de cliquer sur TRANSMETTRE"); 
+      } 
+    } else { 
+      alert("Erreur de récupération depuis le relais"); 
+    }
+  }catch(e){ 
+    alert("Connexion au serveur impossible"); 
+  }
+  document.getElementById("stats").innerHTML = `${DB.parcelles.length} éléments | ${DB.role}`;
 }
 
 
