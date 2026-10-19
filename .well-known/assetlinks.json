@@ -1,8 +1,12 @@
-[{
-      "relation": ["delegate_permission/common.handle_all_urls"],
-      "target": {
-        "namespace": "android_app",
-        "package_name": "com.tracebenin.app",
-        "sha256_cert_fingerprints": ["14:D9:50:B6:11:46:5A:7D:C0:AF:FE:DF:7D:CF:39:58:6E:37:7D:A7:EA:A7:31:66:DF:CA:11:42:1A:0C:94:14"]
-      }
-    }]
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.kscor.tracebenin",
+      "sha256_cert_fingerprints": [
+        "VOTRE_SHA256_FINGERPRINT_ICI"
+      ]
+    }
+  }
+]
