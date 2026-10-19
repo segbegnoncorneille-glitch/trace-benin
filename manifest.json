@@ -1,21 +1,28 @@
 ﻿{
   "short_name": "TRACE BENIN",
-  "name": "TRACE BENIN V7.4 - SERVICE DE TRANSMISSION TECHNIQUE",
+  "name": "KSCOR TRACE BENIN - Service Technique d'Acheminement",
+  "description": "Application PWA neutre d'acheminement et de routage de données géospatiales pour le respect du règlement RDUE/EUDR.",
   "icons": [
     {
       "src": "./icon-192.png",
       "type": "image/png",
-      "sizes": "192x192"
+      "sizes": "192x192",
+      "purpose": "any maskable"
     },
     {
-      "src": "./icon-192.png",
+      "src": "./icon-512.png",
       "type": "image/png",
-      "sizes": "512x512"
+      "sizes": "512x512",
+      "purpose": "any maskable"
     }
   ],
+  "id": "/?utm_source=pwa",
   "start_url": "./index.html",
-  "background_color": "#f4f4f0",
+  "background_color": "#0a7a42",
   "theme_color": "#0a7a42",
   "display": "standalone",
-  "orientation": "portrait"
+  "orientation": "portrait",
+  "lang": "fr-BJ",
+  "dir": "ltr",
+  "categories": ["business", "productivity", "utilities"]
 }
